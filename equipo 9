@@ -27,7 +27,7 @@ public static void main(String[] args) {
     // Imprimir el promedio
     System.out.println("El promedio de los elementos de la matriz es: " + promedio); // Instrucción 6
 }
-----------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------
 
 Actividad 1.1
 public class MaximoArray {
