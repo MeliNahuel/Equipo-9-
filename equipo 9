@@ -204,8 +204,6 @@ public static int getHeight(TreeNode root) {
         System.out.println("Altura del arbol es " + getHeight(root));
 
     }
-}
-
 -------------------------------------------------------------------------------------------------------------------------------------------
 
 Actividad 2
