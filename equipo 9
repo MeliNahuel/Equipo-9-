@@ -246,3 +246,127 @@ public static void main(String[] args) {
         System.out.println("Elemento encontrado en el índice: " + resultado);
     }
 }
+--------------------------------------------------------------------------------------------------------------------------------------------------
+Actividad 3
+public class main {
+    public static void main(String[] args) {
+        int[] arreglo = {34, 7, 23, 32, 5, 62};
+
+        System.out.println("Arreglo desordenado:");
+        imprimirArreglo(arreglo);
+
+        QuickSort.quickSort(arreglo, 0, arreglo.length - 1);
+
+        System.out.println("Arreglo ordenado:");
+        imprimirArreglo(arreglo);
+    }
+
+    public static void imprimirArreglo(int[] arreglo) {
+        for (int i : arreglo) {
+            System.out.print(i + " ");
+        }
+        System.out.println();
+    }
+}
+
+public class QuickSort {
+    public static void quickSort(int[] arreglo, int bajo, int alto) {
+        if (bajo < alto) {
+            int indiceParticion = particion(arreglo, bajo, alto);
+            quickSort(arreglo, bajo, indiceParticion - 1);
+            quickSort(arreglo, indiceParticion + 1, alto);
+        }
+    }
+
+   
+
+
+private static int particion(int[] arreglo, int bajo, int alto) {
+        int pivote = arreglo[alto];
+        int i = (bajo - 1);
+
+        for (int j = bajo; j < alto; j++) {
+            if (arreglo[j] <= pivote) {
+                i++;
+                int temp = arreglo[i];
+                arreglo[i] = arreglo[j];
+                arreglo[j] = temp;
+            }
+        }
+
+        int temp = arreglo[i + 1];
+        arreglo[i + 1] = arreglo[alto];
+        arreglo[alto] = temp;
+
+        return i + 1;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Actividad 4
+public class MergeSort {
+
+    // Método principal que ordena el arreglo
+    public static void mergeSort(int[] arreglo) {
+        // Si el arreglo tiene 0 o 1 elementos, ya está ordenado
+        if (arreglo.length < 2) {
+            return;
+        }
+
+        // Encontrar el punto medio del arreglo
+        int medio = arreglo.length / 2;
+
+        // Crear subarreglos para las dos mitades
+        int[] izquierda = new int[medio];
+        int[] derecha = new int[arreglo.length - medio];
+
+        // Copiar los elementos a las mitades
+        for (int i = 0; i < medio; i++) {
+            izquierda[i] = arreglo[i];
+        }
+        for (int i = medio; i < arreglo.length; i++) {
+            derecha[i - medio] = arreglo[i];
+        }
+
+        // Llamadas recursivas para ordenar las mitades
+        mergeSort(izquierda);
+        mergeSort(derecha);
+
+        // Mezclar las mitades ordenadas
+        merge(arreglo, izquierda, derecha);
+    }
+
+    // Método para mezclar dos mitades ordenadas
+    private static void merge(int[] arreglo, int[] izquierda, int[] derecha) {
+        int i = 0, j = 0, k = 0;
+
+        // Mezclar los elementos de los subarreglos en orden
+        while (i < izquierda.length && j < derecha.length) {
+            if (izquierda[i] <= derecha[j]) {
+                arreglo[k++] = izquierda[i++];
+            } else {
+                arreglo[k++] = derecha[j++];
+            }
+        }
+
+        // Copiar los elementos restantes de la mitad izquierda, si hay
+        while (i < izquierda.length) {
+            arreglo[k++] = izquierda[i++];
+        }
+
+        // Copiar los elementos restantes de la mitad derecha, si hay
+        while (j < derecha.length) {
+            arreglo[k++] = derecha[j++];
+        }
+    }
+
+    // Método principal para probar el algoritmo
+    public static void main(String[] args) {
+        int[] arreglo = {38, 27, 43, 3, 9, 82, 10};
+        mergeSort(arreglo);
+        System.out.println("Arreglo ordenado:");
+        for (int num : arreglo) {
+            System.out.print(num + " ");
+        }
+    }
+}
+
