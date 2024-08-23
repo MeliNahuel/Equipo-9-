@@ -407,7 +407,8 @@ public class MaximoScoring {
         };
 
         Cliente maxCliente = encontrarMaximoScoring(listaClientes, 0, listaClientes.length - 1);
-        System.out.println("Cliente con el scoring máximo: " + maxCliente.nombre + " con un scoring de " + maxCliente.scoring);
+       System.out.println(""); 
+       System.out.println("Cliente con el scoring máximo: " + maxCliente.nombre + " con un scoring de " + maxCliente.scoring);
     }
 }
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
