@@ -414,3 +414,36 @@ public class MaximoScoring {
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Actividad 2
 
+public static void main(String[] args) {
+    // TODO Auto-generated method stub
+    int numeros[] = {1,21,13,45,15,66,27,98};
+    int mayores[] = buscarMayores(numeros, 0, numeros.length -1);
+    System.out.println("Los numeros mayores son " + mayores[0] + " y " +  mayores[1]);
+}
+public static int[] buscarMayores(int[] numeros, int inicio, int fin) {
+    if (inicio == fin) {
+        return new int[]{numeros[inicio], 0};
+    }
+    
+    if(inicio - fin == 1) {
+        if(numeros[inicio] > numeros[fin])	{
+            return new int[] {numeros[inicio],numeros[fin]};
+        }else {
+            return new int[] {numeros[fin],numeros[inicio]};
+        }
+    }
+    int medio = inicio + (fin - inicio)/2;
+    
+    int[] mayoresIzquierda = buscarMayores(numeros, inicio, medio);
+    int[] mayoresDerecha = buscarMayores(numeros, medio + 1, fin);
+    
+    int max1 = Math.max(mayoresIzquierda[0], mayoresDerecha[0]);
+    int max2 = Math.max(Math.min(mayoresIzquierda[0], mayoresDerecha[0]), Math.max(mayoresIzquierda[1], mayoresDerecha[1]));
+   
+    int mayores[] = {max1, max2};
+    
+    return mayores;
+    
+} 
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+Actividad 3
