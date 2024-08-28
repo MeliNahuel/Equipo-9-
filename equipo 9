@@ -500,4 +500,53 @@ public class MaximosScorings {
 }
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Actividad 4
+import java.util.ArrayList;
+import java.util.List;
 
+public class ElementosMasGrandes {
+
+public static void main(String[] args) {
+	List<Integer> numeros = new ArrayList<>();
+        numeros.add(85);
+        numeros.add(95);
+        numeros.add(90);
+        numeros.add(80);
+        numeros.add(92);
+
+        int n = 3; // Número de elementos más grandes a encontrar
+        List<Integer> topNumeros = encontrarTopNNumeros(numeros, 0, numeros.size() - 1, n);
+        System.out.println("Los " + n + " números más grandes son:");
+        for (int numero : topNumeros) {
+            System.out.println(numero);
+        }
+    }
+
+    
+
+    public static List<Integer> encontrarTopNNumeros(List<Integer> numeros, int inicio, int fin, int n) {
+        if (inicio == fin) {
+            List<Integer> resultado = new ArrayList<>();
+            resultado.add(numeros.get(inicio));
+            return resultado;
+        }
+
+        int medio = (inicio + fin) / 2;
+        List<Integer> izq = encontrarTopNNumeros(numeros, inicio, medio, n);
+        List<Integer> der = encontrarTopNNumeros(numeros, medio + 1, fin, n);
+        
+        List<Integer> topN = new ArrayList<>();
+        int i = 0, j = 0;
+
+        while (topN.size() < n && (i < izq.size() || j < der.size())) {
+            if (i < izq.size() && (j >= der.size() || izq.get(i) >= der.get(j))) {
+                topN.add(izq.get(i));
+                i++;
+            } else if (j < der.size()) {
+                topN.add(der.get(j));
+                j++;
+            }
+        }
+
+        return topN;
+    }
+}
