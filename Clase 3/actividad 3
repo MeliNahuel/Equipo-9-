@@ -1,0 +1,50 @@
+class Cliente{
+	int id;
+	String nombre;
+	int scoring;
+	
+	Cliente(int id, String nombre, int scoring){
+		this.id = id;
+		this.nombre = nombre;
+        this.scoring = scoring;
+	}
+}
+public class MaximosScorings {
+
+	public static void main(String[] args) {
+	
+		// TODO Auto-generated method stub
+		Cliente[] listaClientes = {
+	            new Cliente(1, "Cristofer", 100),
+	            new Cliente(2, "Ezequiel", 500),
+	            new Cliente(3, "Tobias", 300),
+	            new Cliente(4, "Martin", 200),
+	            new Cliente(5, "Thonny", 450)
+	        };
+		Cliente[] maxClientes = encontrarMaximosScorings(listaClientes, 0, listaClientes.length - 1);
+		System.out.println("Cliente con el primer scoring máximo: " + maxClientes[0].nombre + " con un scoring de " + maxClientes[0].scoring);
+		System.out.println("Cliente con el segundo scoring máximo: " + maxClientes[1].nombre + " con un scoring de " + maxClientes[1].scoring);
+	}
+	public static Cliente[] encontrarMaximosScorings(Cliente[] listaClientes,int inicio,int fin) {
+		if(inicio == fin) {
+			return new Cliente[] {listaClientes[inicio], null};
+		}
+		
+		int medio = (inicio + fin)/2;
+		
+		Cliente[] maximoizquierda = encontrarMaximosScorings(listaClientes,inicio,medio);
+		Cliente[] maximoDerecha = encontrarMaximosScorings(listaClientes,medio + 1, fin);
+		
+		Cliente[] max = new Cliente[2];
+		if(maximoizquierda[0].scoring > maximoDerecha[0].scoring) {
+			max[0] = maximoizquierda[0];
+			max[1] = (maximoizquierda[1] != null && maximoizquierda[1].scoring > maximoDerecha[0].scoring) ? maximoizquierda[1] : maximoDerecha[0];
+		}else {
+			max[0] = maximoDerecha[0];
+			max[1] = (maximoDerecha[1] != null && maximoDerecha[1].scoring > maximoizquierda[0].scoring) ? maximoDerecha[0] : maximoizquierda[0];
+		}
+		
+		return max;
+	}
+
+}
