@@ -1,0 +1,24 @@
+public static int getHeight(TreeNode root) {
+        if(root==null) { 
+            return -1;
+        } else {
+            return 1+ Math.max(getHeight(root.left),getHeight(root.right));
+        }    
+    }
+
+    public static void main(String[] args) {
+
+        // Crear un árbol de ejemplo
+        TreeNode root = new TreeNode(10);
+        root.left = new TreeNode(5);
+        root.right = new TreeNode(20);
+        root.left.left = new TreeNode(3);
+        root.left.right = new TreeNode(7);
+        root.right.left = new TreeNode(15);
+        root.right.right = new TreeNode(25);
+        root.right.right.right = new TreeNode(30);
+
+        
+        System.out.println("Altura del arbol es " + getHeight(root));
+
+    }
