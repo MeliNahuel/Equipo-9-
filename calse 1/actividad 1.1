@@ -1,0 +1,93 @@
+Actividad 1.1
+
+public class MaximoArray {
+    public static int encontrarMaximo(int[] array) {
+        int max = array[0];
+        for (int i = 1; i < array.length; i++) {
+            if (array[i] > max) {
+                max = array[i];
+            }
+        }
+      return max;
+    }
+    public static void main(String[] args) {
+        int[] numeros = {4, 7, 1, 9, 3};
+        int maximo = encontrarMaximo(numeros);
+        System.out.println("El Maximo es: " + maximo);
+    }
+}
+
+
+/// Orden de complejidad asintótica:
+//La complejidad asintótica del programa es ( O(n) ), donde ( n ) es el número de elementos en el array.
+// Esto se debe a que el algoritmo debe recorrer todos los elementos del array una vez para encontrar el máximo.
+
+
+public class FacturaciónSinMap {
+    public static void main(String[] args) {
+        int[][] facturas = {
+                {1, 1, 100},
+                {2, 2, 200},
+                {3, 1, 150}
+        };
+
+        String[][] clientes = {
+                {"1", "Cliente1"},
+                {"2", "Cliente2"},
+        };
+
+        for (String[] cliente : clientes) {
+            int idCliente = Integer.parseInt(cliente[0]);
+            String nombreCliente = cliente[1];
+            int sumaImportes = 0;
+
+            for (int[] factura : facturas) {
+                if (factura[1] == idCliente) {
+                    sumaImportes += factura[2];
+                }
+            }
+
+            System.out.println("ID Cliente: " + idCliente + ", Nombre: " + nombreCliente + ", Suma Importes: " + sumaImportes);
+        }
+    }
+}
+
+/// Diferencia en cuanto a la complejidad asintótica:
+// Sin Map: La complejidad es ( O(n \times m) ), donde ( n ) es el número de clientes y ( m ) es el número de facturas. Esto se debe a que, para cada cliente, se recorre la lista completa de facturas.
+// Con Map: La complejidad es ( O(n + m) ). Primero se recorre la lista de facturas una vez para sumar los importes por cliente (( O(m) )), y luego se recorre la lista de clientes para imprimir los resultados (( O(n) )).
+// Esto es más eficiente que la implementación sin Map.
+
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class FacturaciónConMap {
+    public static void main(String[] args) {
+        int[][] facturas = {
+                {1, 1, 100},
+                {2, 2, 200},
+                {3, 1, 150}
+        };
+
+        Map<Integer, String> clientes = new HashMap<>();
+        clientes.put(1, "Cliente1");
+        clientes.put(2, "Cliente2");
+
+        Map<Integer, Integer> sumaImportesPorCliente = new HashMap<>();
+
+        for (int[] factura : facturas) {
+            int idCliente = factura[1];
+            int importe = factura[2];
+
+            sumaImportesPorCliente.put(idCliente, sumaImportesPorCliente.getOrDefault(idCliente, 0) + importe);
+        }
+
+        for (Map.Entry<Integer, Integer> entrada : sumaImportesPorCliente.entrySet()) {
+            int idCliente = entrada.getKey();
+            int sumaImportes = entrada.getValue();
+            String nombreCliente = clientes.get(idCliente);
+
+            System.out.println("ID Cliente: " + idCliente + ", Nombre: " + nombreCliente + ", Suma Importes: " + sumaImportes);
+        }
+    }
+}
