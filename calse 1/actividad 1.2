@@ -1,0 +1,28 @@
+Actividad 1.2
+
+
+
+import java.math.BigInteger;
+
+public class LongAndBigIntegerExample {
+    public static void main(String[] args) {
+        // Example using long
+        long a = 9223372036854775807L; // Maximum value of long
+        long b = 1L;
+        long resultLong = a + b; // This will cause an overflow
+
+        System.out.println("Result using long (with overflow): " + resultLong);
+
+        // Example using BigInteger
+        BigInteger bigA = new BigInteger("9223372036854775807");
+        BigInteger bigB = new BigInteger("1");
+        BigInteger resultBigInteger = bigA.add(bigB); // No overflow here
+
+        System.out.println("Result using BigInteger: " + resultBigInteger);
+    }
+}
+
+/// Tipo de Dato longEl tipo de dato long en Java es un entero con complemento a dos de 64 bits. 
+Tiene un valor mínimo de -2^63 y un valor máximo de 2^63-1. 
+Se usa cuando necesitas un rango de valores más amplio que el proporcionado por el tipo int.Clase BigIntegerBigInteger es una clase en Java que permite manejar enteros muy grandes que están fuera del rango de los tipos de datos primitivos como int y long. 
+Proporciona métodos para operaciones aritméticas, cálculo de MCD, generación de números primos, manipulación de bits, y más.
