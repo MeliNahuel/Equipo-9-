@@ -1,0 +1,19 @@
+
+Actividad 1.3 
+
+public class SumaRecursiva {
+    public static int sumar(int n) {
+        // Caso base: si n es 1, la suma es 1
+        if (n == 1) {
+            return 1;
+        } else {
+            // Caso recursivo: n + suma de los primeros (n-1) números
+            return n + sumar(n - 1);
+        }
+    }
+
+    public static void main(String[] args) {
+        int n = 5; // Puedes cambiar este valor por el que desees
+        System.out.println("La suma de los primeros " + n + " números enteros es: " + sumar(n));
+    }
+}
