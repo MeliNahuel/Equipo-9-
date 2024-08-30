@@ -1,0 +1,63 @@
+import java.util.Arrays;
+import java.util.Comparator;
+
+class Objeto {
+    int valor, peso;
+
+    // Constructor
+    public Objeto(int valor, int peso) {
+        this.valor = valor;
+        this.peso = peso;
+    }
+}
+
+public class Camion {
+
+    // Método para obtener el valor máximo que se puede llevar en el camión
+    public static double obtenerValorMaximo(int capacidad, Objeto[] objetos) {
+        // Ordenar los objetos por la relación valor/peso en orden descendente
+        Arrays.sort(objetos, new Comparator<Objeto>() {
+            @Override
+            public int compare(Objeto o1, Objeto o2) {
+                double r1 = (double) o1.valor / o1.peso;
+                double r2 = (double) o2.valor / o2.peso;
+                return Double.compare(r2, r1);
+            }
+        });
+
+        double valorTotal = 0.0;
+
+        for (Objeto objeto : objetos) {
+            // Si podemos llevar el objeto completo
+            if (capacidad - objeto.peso >= 0) {
+                capacidad -= objeto.peso;
+                valorTotal += objeto.valor;
+            } else {
+                // Si no podemos llevarlo completo, llevamos una fracción de él
+                double fraccion = ((double) capacidad / objeto.peso);
+                valorTotal += objeto.valor * fraccion;
+                capacidad = (int) (capacidad - (objeto.peso * fraccion));
+                break;
+            }
+        }
+        return valorTotal;
+    }
+
+    public static void main(String[] args) {
+        // Definimos los objetos
+        Objeto[] objetos = {
+                new Objeto(90, 10),
+                new Objeto(50, 20),
+                new Objeto(70, 30)
+        };
+
+        // Capacidad del camión
+        int capacidad = 50;
+
+        // Calculamos el valor máximo que se puede obtener
+        double valorMaximo = obtenerValorMaximo(capacidad, objetos);
+
+        // Imprimimos el resultado
+        System.out.println("El valor máximo que se puede llevar en el camión es: " + valorMaximo);
+    }
+}
