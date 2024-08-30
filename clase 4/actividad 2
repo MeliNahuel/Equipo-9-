@@ -1,0 +1,64 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+class Comprobante implements Comparable<Comprobante> {
+    int valor;
+
+    Comprobante(int valor) {
+        this.valor = valor;
+    }
+
+    @Override
+    public int compareTo(Comprobante otro) {
+        return otro.valor - this.valor; // Ordenar de mayor a menor
+    }
+
+    @Override
+    public String toString() {
+        return "Comprobante{" + "valor=" + valor + '}';
+    }
+}
+
+public class CambioMoneda {
+
+    public static List<Comprobante> cambioMoneda(List<Comprobante> comprobantes, int valorObjetivo) {
+        Collections.sort(comprobantes); // Ordenar los comprobantes de mayor a menor
+        List<Comprobante> resultado = new ArrayList<>();
+        int total = 0;
+
+        for (Comprobante comprobante : comprobantes) {
+            while (comprobante.valor <= valorObjetivo && valorObjetivo > 0) {
+                resultado.add(comprobante);
+                valorObjetivo -= comprobante.valor;
+            }
+        }
+
+        if (valorObjetivo == 0) {
+            return resultado;
+        } else {
+            System.out.println("No es posible realizar la compra con los comprobantes disponibles");
+            return new ArrayList<>(); // Retorna lista vacía si no es posible
+        }
+    }
+
+    public static void main(String[] args) {
+        List<Comprobante> comprobantes = new ArrayList<>();
+        comprobantes.add(new Comprobante(50));
+        comprobantes.add(new Comprobante(20));
+        comprobantes.add(new Comprobante(10));
+        comprobantes.add(new Comprobante(5));
+        comprobantes.add(new Comprobante(1));
+
+        int valorObjetivo = 93;
+
+        List<Comprobante> resultado = cambioMoneda(comprobantes, valorObjetivo);
+
+        if (!resultado.isEmpty()) {
+            System.out.println("Comprobantes utilizados:");
+            for (Comprobante c : resultado) {
+                System.out.println(c);
+            }
+        }
+    }
+}
