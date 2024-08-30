@@ -1,0 +1,10 @@
+///Pseudocódigo
+function greedyChange(monedas, cantidad):
+    ordenar monedas en orden descendente
+    para cada moneda en monedas:
+        mientras cantidad >= moneda:
+            cantidad = cantidad - moneda
+    si cantidad es igual a 0:
+        retornar True
+    sino:
+        retornar False
