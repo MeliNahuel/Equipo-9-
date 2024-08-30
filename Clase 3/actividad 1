@@ -1,0 +1,42 @@
+Actividad 1
+
+class Cliente {
+    int id;
+    String nombre;
+    int scoring;
+
+    Cliente(int id, String nombre, int scoring) {
+        this.id = id;
+        this.nombre = nombre;
+        this.scoring = scoring;
+    }
+}
+
+public class MaximoScoring {
+
+    public static Cliente encontrarMaximoScoring(Cliente[] listaClientes, int inicio, int fin) {
+        if (inicio == fin) {
+            return listaClientes[inicio];
+        }
+
+        int medio = (inicio + fin) / 2;
+        Cliente maxIzquierda = encontrarMaximoScoring(listaClientes, inicio, medio);
+        Cliente maxDerecha = encontrarMaximoScoring(listaClientes, medio + 1, fin);
+
+        return (maxIzquierda.scoring >= maxDerecha.scoring) ? maxIzquierda : maxDerecha;
+    }
+
+    public static void main(String[] args) {
+        Cliente[] listaClientes = {
+            new Cliente(1, "Cliente A", 85),
+            new Cliente(2, "Cliente B", 92),
+            new Cliente(3, "Cliente C", 76),
+            new Cliente(4, "Cliente D", 99),
+            new Cliente(5, "Cliente E", 65)
+        };
+
+        Cliente maxCliente = encontrarMaximoScoring(listaClientes, 0, listaClientes.length - 1);
+       System.out.println(""); 
+       System.out.println("Cliente con el scoring máximo: " + maxCliente.nombre + " con un scoring de " + maxCliente.scoring);
+    }
+}
