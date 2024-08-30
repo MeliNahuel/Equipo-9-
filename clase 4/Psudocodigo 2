@@ -1,0 +1,14 @@
+función cambioMoneda(comprobantes, valor_objetivo):
+    ordenar(comprobantes) por valor de mayor a menor
+    total = 0
+    lista_resultado = []
+
+    para cada comprobante en comprobantes:
+        mientras comprobante.valor <= valor_objetivo y valor_objetivo > 0:
+            agregar comprobante a lista_resultado
+            valor_objetivo -= comprobante.valor
+
+    si valor_objetivo == 0:
+        retornar lista_resultado
+    sino:
+        retornar "No es posible realizar la compra con los comprobantes disponibles"
