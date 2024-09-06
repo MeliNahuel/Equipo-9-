@@ -1,10 +1,20 @@
 import java.util.*;
 
 class Usuario {
-    String nombre;
+    private String nombre;
+    private String id;
 
-    public Usuario(String nombre) {
+    public Usuario(String id, String nombre) {
+        this.id = id;
         this.nombre = nombre;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getNombre() {
+        return nombre;
     }
 
     @Override
@@ -12,31 +22,29 @@ class Usuario {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Usuario usuario = (Usuario) obj;
-        return Objects.equals(nombre, usuario.nombre);
+        return Objects.equals(id, usuario.id); // Comparar por ID
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nombre);
+        return Objects.hash(id); // Usar ID en el hashCode
     }
 
     @Override
     public String toString() {
-        return nombre;
+        return "ID: " + id + ", Nombre: " + nombre;
     }
 }
 
 class RedSocial {
-    // Mapa para la lista de adyacencia: clave es un Usuario, valor es la lista de usuarios que sigue
     private Map<Usuario, List<Usuario>> seguidores;
 
     public RedSocial() {
         seguidores = new HashMap<>();
     }
 
-    // Agregar un nuevo usuario al sistema
-    public void agregarUsuario(String nombre) {
-        Usuario usuario = new Usuario(nombre);
+    public void agregarUsuario(String id, String nombre) {
+        Usuario usuario = new Usuario(id, nombre);
         if (!seguidores.containsKey(usuario)) {
             seguidores.put(usuario, new ArrayList<>());
         } else {
@@ -44,55 +52,51 @@ class RedSocial {
         }
     }
 
-    // Permitir que un usuario siga a otro
-    public void seguir(String seguidor, String seguido) {
-        Usuario uSeguidor = new Usuario(seguidor);
-        Usuario uSeguido = new Usuario(seguido);
+    public void seguir(String idSeguidor, String idSeguido) {
+        Usuario uSeguidor = buscarUsuarioPorId(idSeguidor);
+        Usuario uSeguido = buscarUsuarioPorId(idSeguido);
 
-        if (seguidores.containsKey(uSeguidor) && seguidores.containsKey(uSeguido)) {
+        if (uSeguidor != null && uSeguido != null) {
             List<Usuario> listaSeguidos = seguidores.get(uSeguidor);
             if (!listaSeguidos.contains(uSeguido)) {
                 listaSeguidos.add(uSeguido);
-                System.out.println(seguidor + " ahora sigue a " + seguido);
+                System.out.println(uSeguidor.getNombre() + " ahora sigue a " + uSeguido.getNombre());
             } else {
-                System.out.println(seguidor + " ya sigue a " + seguido);
+                System.out.println(uSeguidor.getNombre() + " ya sigue a " + uSeguido.getNombre());
             }
         } else {
             System.out.println("Uno de los usuarios no existe.");
         }
     }
 
-    // Permitir que un usuario deje de seguir a otro
-    public void dejarDeSeguir(String seguidor, String seguido) {
-        Usuario uSeguidor = new Usuario(seguidor);
-        Usuario uSeguido = new Usuario(seguido);
+    public void dejarDeSeguir(String idSeguidor, String idSeguido) {
+        Usuario uSeguidor = buscarUsuarioPorId(idSeguidor);
+        Usuario uSeguido = buscarUsuarioPorId(idSeguido);
 
-        if (seguidores.containsKey(uSeguidor) && seguidores.containsKey(uSeguido)) {
+        if (uSeguidor != null && uSeguido != null) {
             List<Usuario> listaSeguidos = seguidores.get(uSeguidor);
             if (listaSeguidos.contains(uSeguido)) {
                 listaSeguidos.remove(uSeguido);
-                System.out.println(seguidor + " ha dejado de seguir a " + seguido);
+                System.out.println(uSeguidor.getNombre() + " ha dejado de seguir a " + uSeguido.getNombre());
             } else {
-                System.out.println(seguidor + " no sigue a " + seguido);
+                System.out.println(uSeguidor.getNombre() + " no sigue a " + uSeguido.getNombre());
             }
         } else {
             System.out.println("Uno de los usuarios no existe.");
         }
     }
 
-    // Consultar la lista de usuarios que sigue un usuario
-    public void listaDeSeguidos(String usuario) {
-        Usuario u = new Usuario(usuario);
-        if (seguidores.containsKey(u)) {
-            System.out.println(usuario + " sigue a: " + seguidores.get(u));
+    public void listaDeSeguidos(String idUsuario) {
+        Usuario u = buscarUsuarioPorId(idUsuario);
+        if (u != null) {
+            System.out.println(u.getNombre() + " sigue a: " + seguidores.get(u));
         } else {
             System.out.println("El usuario no existe.");
         }
     }
 
-    // Consultar la lista de usuarios que siguen a un usuario
-    public void listaDeSeguidores(String usuario) {
-        Usuario u = new Usuario(usuario);
+    public void listaDeSeguidores(String idUsuario) {
+        Usuario u = buscarUsuarioPorId(idUsuario);
         List<Usuario> listaSeguidores = new ArrayList<>();
 
         for (Map.Entry<Usuario, List<Usuario>> entry : seguidores.entrySet()) {
@@ -101,7 +105,16 @@ class RedSocial {
             }
         }
 
-        System.out.println(usuario + " es seguido por: " + listaSeguidores);
+        System.out.println(u.getNombre() + " es seguido por: " + listaSeguidores);
+    }
+
+    private Usuario buscarUsuarioPorId(String id) {
+        for (Usuario usuario : seguidores.keySet()) {
+            if (usuario.getId().equals(id)) {
+                return usuario;
+            }
+        }
+        return null;
     }
 }
 
@@ -109,27 +122,27 @@ public class Main {
     public static void main(String[] args) {
         RedSocial redSocial = new RedSocial();
 
-        // Agregar usuarios
-        redSocial.agregarUsuario("A");
-        redSocial.agregarUsuario("B");
-        redSocial.agregarUsuario("C");
-        redSocial.agregarUsuario("D");
+        // Agregar usuarios con ID y nombre
+        redSocial.agregarUsuario("1", "A");
+        redSocial.agregarUsuario("2", "B");
+        redSocial.agregarUsuario("3", "C");
+        redSocial.agregarUsuario("4", "D");
 
-        // Establecer relaciones de seguidores
-        redSocial.seguir("A", "B");
-        redSocial.seguir("A", "C");
-        redSocial.seguir("B", "D");
-        redSocial.seguir("C", "D");
+        // Establecer relaciones de seguidores usando ID
+        redSocial.seguir("1", "2");
+        redSocial.seguir("1", "3");
+        redSocial.seguir("2", "4");
+        redSocial.seguir("3", "4");
 
         // Consultar listas de seguidos
-        redSocial.listaDeSeguidos("A");
-        redSocial.listaDeSeguidos("B");
+        redSocial.listaDeSeguidos("1");
+        redSocial.listaDeSeguidos("2");
 
         // Consultar listas de seguidores
-        redSocial.listaDeSeguidores("D");
+        redSocial.listaDeSeguidores("4");
 
         // Dejar de seguir
-        redSocial.dejarDeSeguir("A", "C");
-        redSocial.listaDeSeguidos("A");
+        redSocial.dejarDeSeguir("1", "3");
+        redSocial.listaDeSeguidos("1");
     }
 }
