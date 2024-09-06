@@ -1,0 +1,101 @@
+import java.util.*;
+
+// Clase para representar una arista entre dos nodos con un costo asociado
+class Edge implements Comparable<Edge> {
+    int source, destination, weight;
+
+    // Constructor
+    public Edge(int source, int destination, int weight) {
+        this.source = source;
+        this.destination = destination;
+        this.weight = weight;
+    }
+
+    // Comparar por peso para ordenar en el algoritmo de Prim
+    @Override
+    public int compareTo(Edge other) {
+        return this.weight - other.weight;
+    }
+}
+
+public class PrimAlgorithm {
+    private int V;  // Número de vértices
+    private LinkedList<Edge>[] adjacencyList;
+
+    // Constructor para inicializar el grafo
+    public PrimAlgorithm(int vertices) {
+        this.V = vertices;
+        adjacencyList = new LinkedList[vertices];
+        for (int i = 0; i < vertices; i++) {
+            adjacencyList[i] = new LinkedList<>();
+        }
+    }
+
+    // Método para agregar una arista al grafo
+    public void addEdge(int source, int destination, int weight) {
+        Edge edge1 = new Edge(source, destination, weight);
+        Edge edge2 = new Edge(destination, source, weight);
+        adjacencyList[source].add(edge1);
+        adjacencyList[destination].add(edge2); // Como el grafo es no dirigido
+    }
+
+    // Algoritmo de Prim para encontrar el MST
+    public void primMST() {
+        // MinHeap para escoger la arista con menor peso
+        PriorityQueue<Edge> minHeap = new PriorityQueue<>();
+        boolean[] visited = new boolean[V]; // Para verificar si un vértice ya está en el MST
+        int totalCost = 0; // Costo total del MST
+        List<Edge> mst = new ArrayList<>(); // Almacena las aristas del MST
+
+        // Empezar con el nodo 0
+        visited[0] = true;
+        minHeap.addAll(adjacencyList[0]);
+
+        while (!minHeap.isEmpty()) {
+            // Extraemos la arista de menor peso
+            Edge currentEdge = minHeap.poll();
+
+            if (visited[currentEdge.destination]) {
+                continue; // Ignorar si ya está visitado
+            }
+
+            // Añadir la arista al MST
+            mst.add(currentEdge);
+            totalCost += currentEdge.weight;
+            visited[currentEdge.destination] = true;
+
+            // Añadir las nuevas aristas del nodo recién añadido
+            for (Edge edge : adjacencyList[currentEdge.destination]) {
+                if (!visited[edge.destination]) {
+                    minHeap.add(edge);
+                }
+            }
+        }
+
+        // Mostrar el conjunto de conexiones y el costo total
+        System.out.println("Las conexiones en el MST son:");
+        for (Edge edge : mst) {
+            System.out.println("Ciudad " + edge.source + " - Ciudad " + edge.destination + " | Costo: " + edge.weight);
+        }
+        System.out.println("Costo total de instalación: " + totalCost);
+    }
+
+    public static void main(String[] args) {
+        // Ejemplo con 6 ciudades/estaciones (0 a 5)
+        PrimAlgorithm prim = new PrimAlgorithm(6);
+
+        // Agregar las conexiones (aristas) entre las estaciones con los respectivos costos
+        prim.addEdge(0, 1, 3);
+        prim.addEdge(0, 3, 1);
+        prim.addEdge(1, 2, 1);
+        prim.addEdge(1, 3, 3);
+        prim.addEdge(2, 3, 1);
+        prim.addEdge(2, 4, 6);
+        prim.addEdge(3, 4, 5);
+        prim.addEdge(3, 5, 4);
+        prim.addEdge(4, 5, 2);
+
+        // Aplicar el algoritmo de Prim
+        prim.primMST();
+    }
+}
