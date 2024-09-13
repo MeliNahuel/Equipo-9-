@@ -83,3 +83,4 @@ public class InversionProgramacionDinamica {
                 seleccionDinamica(paquetes, presupuesto));
     }
 }
+---------------------------------------------------------------------------------------------------------
