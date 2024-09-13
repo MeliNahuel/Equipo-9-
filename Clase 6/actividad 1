@@ -55,11 +55,11 @@ public class Mochila {
         int capacidad1 = 6;
 
         // Fuerza bruta Actividad 1
-        System.out.println("Resultado Fuerza Bruta Actividad 1: " +
+        System.out.println("Resultado Fuerza Bruta : " +
                 mochilaFuerzaBruta(objetosActividad1, capacidad1, objetosActividad1.length));
 
         // Programación Dinámica Actividad 1
-        System.out.println("Resultado Programación Dinámica Actividad 1: " +
+        System.out.println("Resultado Programación Dinámica : " +
                 mochilaDinamica(objetosActividad1, capacidad1));
 
         // Actividad 2
@@ -72,11 +72,11 @@ public class Mochila {
         int capacidad2 = 10;
 
         // Fuerza bruta Actividad 2
-        System.out.println("Resultado Fuerza Bruta Actividad 2: " +
+        System.out.println("Resultado Fuerza Bruta : " +
                 mochilaFuerzaBruta(objetosActividad2, capacidad2, objetosActividad2.length));
 
         // Programación Dinámica Actividad 2
-        System.out.println("Resultado Programación Dinámica Actividad 2: " +
+        System.out.println("Resultado Programación Dinámica : " +
                 mochilaDinamica(objetosActividad2, capacidad2));
     }
 }
