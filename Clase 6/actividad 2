@@ -1,0 +1,82 @@
+class Objeto {
+    int peso;
+    int valor;
+
+    public Objeto(int peso, int valor) {
+        this.peso = peso;
+        this.valor = valor;
+    }
+}
+public class Mochila {
+
+    // Programación dinámica
+    public static int mochilaDinamica(Objeto[] objetos, int capacidad) {
+        int n = objetos.length;
+        int[][] dp = new int[n + 1][capacidad + 1];
+
+        // Llenar la tabla de DP
+        for (int i = 1; i <= n; i++) {
+            for (int w = 0; w <= capacidad; w++) {
+                if (objetos[i - 1].peso <= w) {
+                    dp[i][w] = Math.max(dp[i - 1][w],
+                            dp[i - 1][w - objetos[i - 1].peso] + objetos[i - 1].valor);
+                } else {
+                    dp[i][w] = dp[i - 1][w];
+                }
+            }
+        }
+        return dp[n][capacidad];
+    }
+
+    // Fuerza bruta
+    public static int mochilaFuerzaBruta(Objeto[] objetos, int capacidad, int n) {
+        // Caso base
+        if (n == 0 || capacidad == 0) {
+            return 0;
+        }
+        // Si el peso del objeto actual es mayor que la capacidad, se omite
+        if (objetos[n - 1].peso > capacidad) {
+            return mochilaFuerzaBruta(objetos, capacidad, n - 1);
+        } else {
+            // Se elige el máximo entre incluir el objeto o no
+            return Math.max(
+                    objetos[n - 1].valor + mochilaFuerzaBruta(objetos, capacidad - objetos[n - 1].peso, n - 1),
+                    mochilaFuerzaBruta(objetos, capacidad, n - 1));
+        }
+    }
+
+    public static void main(String[] args) {
+        // Actividad 1
+        Objeto[] objetosActividad1 = {
+                new Objeto(3, 4),
+                new Objeto(4, 5),
+                new Objeto(2, 3)
+        };
+        int capacidad1 = 6;
+
+        // Fuerza bruta Actividad 1
+        System.out.println("Resultado Fuerza Bruta Actividad 1: " +
+                mochilaFuerzaBruta(objetosActividad1, capacidad1, objetosActividad1.length));
+
+        // Programación Dinámica Actividad 1
+        System.out.println("Resultado Programación Dinámica Actividad 1: " +
+                mochilaDinamica(objetosActividad1, capacidad1));
+
+        // Actividad 2
+        Objeto[] objetosActividad2 = {
+                new Objeto(2, 4),
+                new Objeto(5, 2),
+                new Objeto(6, 1),
+                new Objeto(7, 6)
+        };
+        int capacidad2 = 10;
+
+        // Fuerza bruta Actividad 2
+        System.out.println("Resultado Fuerza Bruta Actividad 2: " +
+                mochilaFuerzaBruta(objetosActividad2, capacidad2, objetosActividad2.length));
+
+        // Programación Dinámica Actividad 2
+        System.out.println("Resultado Programación Dinámica Actividad 2: " +
+                mochilaDinamica(objetosActividad2, capacidad2));
+    }
+}
