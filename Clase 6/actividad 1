@@ -1,3 +1,12 @@
+class Objeto {
+    int peso;
+    int valor;
+
+    public Objeto(int peso, int valor) {
+        this.peso = peso;
+        this.valor = valor;
+    }
+}
 public class Mochila {
 
     // Programación dinámica
@@ -39,9 +48,9 @@ public class Mochila {
     public static void main(String[] args) {
         // Actividad 1
         Objeto[] objetosActividad1 = {
-            new Objeto(3, 4),
-            new Objeto(4, 5),
-            new Objeto(2, 3)
+                new Objeto(3, 4),
+                new Objeto(4, 5),
+                new Objeto(2, 3)
         };
         int capacidad1 = 6;
 
@@ -55,10 +64,10 @@ public class Mochila {
 
         // Actividad 2
         Objeto[] objetosActividad2 = {
-            new Objeto(2, 4),
-            new Objeto(5, 2),
-            new Objeto(6, 1),
-            new Objeto(7, 6)
+                new Objeto(2, 4),
+                new Objeto(5, 2),
+                new Objeto(6, 1),
+                new Objeto(7, 6)
         };
         int capacidad2 = 10;
 
