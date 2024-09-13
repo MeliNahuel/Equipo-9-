@@ -1,72 +1,85 @@
-import java.util.Arrays;
+class PaqueteInversion {
+    int costo;
+    int ganancia;
 
-public class InvestmentSelection {
-
-    // Datos de ejemplo
-    static int[] costos = {12, 20, 15, 25};
-    static int[] ganancias = {150, 200, 100, 300};
-    static int presupuesto = 35;
+    public PaqueteInversion(int costo, int ganancia) {
+        this.costo = costo;
+        this.ganancia = ganancia;
+    }
+}
+public class InversionFuerzaBruta {
 
     // Fuerza Bruta
-    public static int fuerzaBruta(int n, int presupuesto) {
+    public static int seleccionFuerzaBruta(PaqueteInversion[] paquetes, int presupuesto, int n) {
+        // Caso base
         if (n == 0 || presupuesto == 0) {
             return 0;
         }
-        if (costos[n - 1] > presupuesto) {
-            return fuerzaBruta(n - 1, presupuesto);
+
+        // Si el costo del paquete actual es mayor que el presupuesto, lo omitimos
+        if (paquetes[n - 1].costo > presupuesto) {
+            return seleccionFuerzaBruta(paquetes, presupuesto, n - 1);
         } else {
-            return Math.max(fuerzaBruta(n - 1, presupuesto),
-                    ganancias[n - 1] + fuerzaBruta(n - 1, presupuesto - costos[n - 1]));
+            // Máximo entre incluir o no el paquete actual
+            return Math.max(paquetes[n - 1].ganancia + seleccionFuerzaBruta(paquetes, presupuesto - paquetes[n - 1].costo, n - 1),
+                    seleccionFuerzaBruta(paquetes, presupuesto, n - 1));
         }
-    }
-
-    // Programación dinámica (Knapsack problem)
-    public static int programacionDinamica() {
-        int n = costos.length;
-        int[][] dp = new int[n + 1][presupuesto + 1];
-
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= presupuesto; j++) {
-                if (costos[i - 1] <= j) {
-                    dp[i][j] = Math.max(dp[i - 1][j], ganancias[i - 1] + dp[i - 1][j - costos[i - 1]]);
-                } else {
-                    dp[i][j] = dp[i - 1][j];
-                }
-            }
-        }
-
-        return dp[n][presupuesto];
-    }
-
-    // Algoritmo voraz (Greedy)
-    public static int greedy() {
-        int n = costos.length;
-        double[] ratio = new double[n];
-        Integer[] indices = new Integer[n];
-        for (int i = 0; i < n; i++) {
-            ratio[i] = (double) ganancias[i] / costos[i];
-            indices[i] = i;
-        }
-
-        // Ordenar por ratio ganancia/costo de mayor a menor
-        Arrays.sort(indices, (a, b) -> Double.compare(ratio[b], ratio[a]));
-
-        int gananciaTotal = 0;
-        int presupuestoRestante = presupuesto;
-        for (int i = 0; i < n; i++) {
-            int index = indices[i];
-            if (costos[index] <= presupuestoRestante) {
-                gananciaTotal += ganancias[index];
-                presupuestoRestante -= costos[index];
-            }
-        }
-
-        return gananciaTotal;
     }
 
     public static void main(String[] args) {
-        System.out.println("Fuerza Bruta: " + fuerzaBruta(costos.length, presupuesto));
-        System.out.println("Programación Dinámica: " + programacionDinamica());
-        System.out.println("Greedy: " + greedy());
+        PaqueteInversion[] paquetes = {
+                new PaqueteInversion(12, 150),
+                new PaqueteInversion(20, 200),
+                new PaqueteInversion(15, 100),
+                new PaqueteInversion(25, 300)
+        };
+        int presupuesto = 35;
+
+        System.out.println("Ganancia máxima Fuerza Bruta: " +
+                seleccionFuerzaBruta(paquetes, presupuesto, paquetes.length));
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------------
+
+class PaqueteInversion {
+    int costo;
+    int ganancia;
+
+    public PaqueteInversion(int costo, int ganancia) {
+        this.costo = costo;
+        this.ganancia = ganancia;
+    }
+}
+public class InversionProgramacionDinamica {
+
+    // Programación Dinámica
+    public static int seleccionDinamica(PaqueteInversion[] paquetes, int presupuesto) {
+        int n = paquetes.length;
+        int[][] dp = new int[n + 1][presupuesto + 1];
+
+        for (int i = 1; i <= n; i++) {
+            for (int w = 0; w <= presupuesto; w++) {
+                if (paquetes[i - 1].costo <= w) {
+                    dp[i][w] = Math.max(dp[i - 1][w],
+                            dp[i - 1][w - paquetes[i - 1].costo] + paquetes[i - 1].ganancia);
+                } else {
+                    dp[i][w] = dp[i - 1][w];
+                }
+            }
+        }
+        return dp[n][presupuesto];
+    }
+
+    public static void main(String[] args) {
+        PaqueteInversion[] paquetes = {
+                new PaqueteInversion(12, 150),
+                new PaqueteInversion(20, 200),
+                new PaqueteInversion(15, 100),
+                new PaqueteInversion(25, 300)
+        };
+        int presupuesto = 35;
+
+        System.out.println("Ganancia máxima Programación Dinámica: " +
+                seleccionDinamica(paquetes, presupuesto));
     }
 }
