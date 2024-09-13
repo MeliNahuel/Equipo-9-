@@ -1,0 +1,23 @@
+
+
+
+
+
+
+Objeto[] objetosActividad2 = {
+                new Objeto(2, 4),
+                new Objeto(5, 2),
+                new Objeto(6, 1),
+                new Objeto(7, 6)
+        };
+        int capacidad2 = 10;
+
+        // Fuerza bruta Actividad 2
+        System.out.println("Resultado Fuerza Bruta Actividad 2: " +
+                mochilaFuerzaBruta(objetosActividad2, capacidad2, objetosActividad2.length));
+
+        // Programación Dinámica Actividad 2
+        System.out.println("Resultado Programación Dinámica Actividad 2: " +
+                mochilaDinamica(objetosActividad2, capacidad2));
+    }
+}
