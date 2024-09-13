@@ -1,0 +1,42 @@
+class PaqueteInversion {
+    int costo;
+    int ganancia;
+
+    public PaqueteInversion(int costo, int ganancia) {
+        this.costo = costo;
+        this.ganancia = ganancia;
+    }
+}
+import java.util.Arrays;
+
+public class InversionGreedy {
+
+    // Algoritmo Greedy
+    public static int seleccionGreedy(PaqueteInversion[] paquetes, int presupuesto) {
+        // Ordenar por razón ganancia/costo en orden descendente
+        Arrays.sort(paquetes, (p1, p2) -> Double.compare((double)p2.ganancia / p2.costo, (double)p1.ganancia / p1.costo));
+
+        int gananciaTotal = 0;
+        for (PaqueteInversion paquete : paquetes) {
+            if (paquete.costo <= presupuesto) {
+                gananciaTotal += paquete.ganancia;
+                presupuesto -= paquete.costo;
+            }
+        }
+
+        return gananciaTotal;
+    }
+
+    public static void main(String[] args) {
+        PaqueteInversion[] paquetes = {
+            new PaqueteInversion(12, 150),
+            new PaqueteInversion(20, 200),
+            new PaqueteInversion(15, 100),
+            new PaqueteInversion(25, 300)
+        };
+        int presupuesto = 35;
+
+        System.out.println("Ganancia máxima Greedy: " +
+                seleccionGreedy(paquetes, presupuesto));
+    }
+}
