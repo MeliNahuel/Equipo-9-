@@ -1,0 +1,72 @@
+import java.util.Arrays;
+
+public class InvestmentSelection {
+
+    // Datos de ejemplo
+    static int[] costos = {12, 20, 15, 25};
+    static int[] ganancias = {150, 200, 100, 300};
+    static int presupuesto = 35;
+
+    // Fuerza Bruta
+    public static int fuerzaBruta(int n, int presupuesto) {
+        if (n == 0 || presupuesto == 0) {
+            return 0;
+        }
+        if (costos[n - 1] > presupuesto) {
+            return fuerzaBruta(n - 1, presupuesto);
+        } else {
+            return Math.max(fuerzaBruta(n - 1, presupuesto),
+                    ganancias[n - 1] + fuerzaBruta(n - 1, presupuesto - costos[n - 1]));
+        }
+    }
+
+    // Programación dinámica (Knapsack problem)
+    public static int programacionDinamica() {
+        int n = costos.length;
+        int[][] dp = new int[n + 1][presupuesto + 1];
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= presupuesto; j++) {
+                if (costos[i - 1] <= j) {
+                    dp[i][j] = Math.max(dp[i - 1][j], ganancias[i - 1] + dp[i - 1][j - costos[i - 1]]);
+                } else {
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+
+        return dp[n][presupuesto];
+    }
+
+    // Algoritmo voraz (Greedy)
+    public static int greedy() {
+        int n = costos.length;
+        double[] ratio = new double[n];
+        Integer[] indices = new Integer[n];
+        for (int i = 0; i < n; i++) {
+            ratio[i] = (double) ganancias[i] / costos[i];
+            indices[i] = i;
+        }
+
+        // Ordenar por ratio ganancia/costo de mayor a menor
+        Arrays.sort(indices, (a, b) -> Double.compare(ratio[b], ratio[a]));
+
+        int gananciaTotal = 0;
+        int presupuestoRestante = presupuesto;
+        for (int i = 0; i < n; i++) {
+            int index = indices[i];
+            if (costos[index] <= presupuestoRestante) {
+                gananciaTotal += ganancias[index];
+                presupuestoRestante -= costos[index];
+            }
+        }
+
+        return gananciaTotal;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Fuerza Bruta: " + fuerzaBruta(costos.length, presupuesto));
+        System.out.println("Programación Dinámica: " + programacionDinamica());
+        System.out.println("Greedy: " + greedy());
+    }
+}
