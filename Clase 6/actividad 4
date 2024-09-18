@@ -40,6 +40,64 @@ public class InversionFuerzaBruta {
     }
 }
 --------------------------------------------------------------------------------------------------------------------------------
+import java.util.ArrayList;
+import java.util.List;
+
+public class paquetesDeInversion {
+	static class Paquete {
+	    int costo;
+	    int ganancia;
+
+	    Paquete(int costo, int ganancia) {
+	        this.costo = costo;
+	        this.ganancia = ganancia;
+	    }
+
+	    double relacionGananciaCosto() {
+	    	return (double) ganancia / costo;
+	    }
+	    	
+	}
+    public static void main(String[] args) {
+    	int[] costos = {12, 20, 15, 25};
+        int[] ganancias = {150, 200, 100, 300};
+        int presupuesto = 35;
+        
+        System.out.println("La ganancia máxima es: " + maximizarGananciaGreedy(costos, ganancias,presupuesto));
+    }
+    
+    public static int maximizarGananciaGreedy(int [] costos, int [] ganancias,int presupuesto) {
+    	int n = costos.length;
+        List<Paquete> paquetes = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            paquetes.add(new Paquete(costos[i], ganancias[i]));
+        }
+        
+        for (int i = 0; i < paquetes.size() - 1; i++) {
+            for (int j = i + 1; j < paquetes.size(); j++) {
+                if (paquetes.get(i).relacionGananciaCosto() < paquetes.get(j).relacionGananciaCosto()) {
+                	Paquete temp = paquetes.get(i);
+                	paquetes.set(i, paquetes.get(j));
+                	paquetes.set(j, temp);
+                }
+            }
+        }
+        
+        int costoTotal = 0;
+        int gananciaTotal = 0;
+
+        for (Paquete paquete : paquetes) {
+            if (costoTotal + paquete.costo <= presupuesto) {
+                costoTotal += paquete.costo;
+                gananciaTotal += paquete.ganancia;
+            }
+        }
+
+        return gananciaTotal;
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------------
 
 class PaqueteInversion {
     int costo;
