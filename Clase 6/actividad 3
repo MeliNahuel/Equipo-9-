@@ -35,6 +35,88 @@ public class FuerzaBruta {
     }
 }
 ------------------------------------------------------------------------------------------
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+
+public class seleccionOptimaProcesos {
+	 static class Proyecto {
+		 int costo;
+		 int beneficio;
+
+		 public Proyecto(int costo, int beneficio) {
+			 this.costo = costo;
+			 this.beneficio = beneficio;
+	        }
+
+		 public double relacionBeneficioCosto() {
+			 return (double) beneficio / costo;
+	        }
+	    }
+
+    public static int fuerzaBruta(int[] costos, int[] beneficios, int presupuesto) {
+    	int maximoBeneficio = 0;
+    	
+    	for(int i = 0; i < (1 << costos.length); i++) { // (1 << costos.length) == 2^n probamos todas las combinaciones posibles
+    		int costoTotal = 0;
+    	    int beneficioTotal = 0;
+    		for(int j = 0; j < costos.length; j++) {
+    			if ((i & (1 << j)) != 0) {		//esta condición verifica si el bit correspondiente al proyecto j está encendido en la combinación i, lo que indica que el proyecto j está incluido en esa combinación.
+	    			costoTotal += costos[j];
+	                beneficioTotal += beneficios[j];
+    			}
+    		}
+    		if(costoTotal <= presupuesto) {
+    			maximoBeneficio = Math.max(maximoBeneficio, beneficioTotal);
+    		}
+    	}
+
+        return maximoBeneficio;
+    }
+    
+    public static int greedy(int[] costos, int[] beneficios, int presupuesto) {
+        int n = costos.length;
+        List<Proyecto> proyectos = new ArrayList<>();
+
+        // Crear una lista de proyectos con su relación beneficio/costo.
+        for (int i = 0; i < n; i++) {
+            proyectos.add(new Proyecto(costos[i], beneficios[i]));
+        }
+
+        // Ordenar los proyectos por la mejor relación beneficio/costo.
+        
+        for (int i = 0; i < proyectos.size() - 1; i++) {
+            for (int j = i + 1; j < proyectos.size(); j++) {
+                if (proyectos.get(i).relacionBeneficioCosto() < proyectos.get(j).relacionBeneficioCosto()) {
+                    Proyecto temp = proyectos.get(i);
+                    proyectos.set(i, proyectos.get(j));
+                    proyectos.set(j, temp);
+                }
+            }
+        }
+        
+        int costoTotal = 0;
+        int beneficioTotal = 0;
+
+        // Seleccionar proyectos de acuerdo con la estrategia greedy.
+        for (Proyecto proyecto : proyectos) {
+            if (costoTotal + proyecto.costo <= presupuesto) {
+                costoTotal += proyecto.costo;
+                beneficioTotal += proyecto.beneficio;
+            }
+        }
+
+        return beneficioTotal;
+    }
+    
+    public static void main(String[] args) {
+        int[] costos = {10, 15, 20, 25};
+        int[] beneficios = {100, 200, 150, 300};
+        int presupuesto = 40;
+
+        System.out.println("Máximo beneficio (Fuerza Bruta): " + fuerzaBruta(costos, beneficios, presupuesto));
+        System.out.println("Máximo beneficio (Greedy): " + greedy(costos, beneficios, presupuesto));
+    }
 
 ------------------------------------------------------------------------------------------
 import java.util.Arrays;
