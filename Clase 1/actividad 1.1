@@ -57,7 +57,6 @@ public class FacturaciónSinMap {
 // Con Map: La complejidad es ( O(n + m) ). Primero se recorre la lista de facturas una vez para sumar los importes por cliente (( O(m) )), y luego se recorre la lista de clientes para imprimir los resultados (( O(n) )).
 // Esto es más eficiente que la implementación sin Map.
 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -91,3 +90,128 @@ public class FacturaciónConMap {
         }
     }
 }
+
+-------------------------------------------------------------------------------------------------------------------------------
+// Otra manera de hacer con Maps
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class EjecucionBconMaps {
+
+    public static void main(String[] args) {
+        
+        List<Comprobante> comprobantes = new ArrayList<>();
+        comprobantes.add(new Comprobante(1, 1, 100));
+        comprobantes.add(new Comprobante(2, 1, 200));
+        comprobantes.add(new Comprobante(3, 2, 150));
+        comprobantes.add(new Comprobante(4, 2, 50));
+        comprobantes.add(new Comprobante(5, 3, 300));
+
+        List<Cliente> clientes = new ArrayList<>();
+        clientes.add(new Cliente(1, "Tobias"));
+        clientes.add(new Cliente(2, "Ezequiel"));
+        clientes.add(new Cliente(3, "Martin"));
+
+        
+        List<ResumenCliente> resumen = generarResumen(comprobantes, clientes);
+
+        
+        for (ResumenCliente resumenCliente : resumen) {
+            System.out.println("ID Cliente: " + resumenCliente.getIdCliente() +
+                    ", Nombre Cliente: " + resumenCliente.getNombreCliente() +
+                    ", Total Importe: " + resumenCliente.getTotalImporte());
+        }
+    }
+
+    public static List<ResumenCliente> generarResumen(List<Comprobante> comprobantes, List<Cliente> clientes) {
+        Map<Integer, Integer> clientTotals = new HashMap<>(); // 1
+
+        for (Comprobante comprobante : comprobantes) { // 1 + 2(n+1) + n = 3n + 3
+            int clienteId = comprobante.getClienteId();  // 1 + 2 = 3
+            int importe = comprobante.getImporte();     // 1 + 2 = 3
+            clientTotals.put(clienteId, clientTotals.getOrDefault(clienteId, 0) + importe);  // 1 + 4 = 5
+        }
+
+        List<ResumenCliente> resumen = new ArrayList<>();   // 1 
+        for (Cliente cliente : clientes) {         //  1 + 2(n+1) + n = 3n + 3
+            int clienteId = cliente.getIdCliente();     // 1 + 2 = 3
+            String nombreCliente = cliente.getNombreCliente(); // 1 + 2 = 3
+            int totalImporte = clientTotals.getOrDefault(clienteId, 0);  // 1 + 2 = 3
+            resumen.add(new ResumenCliente(clienteId, nombreCliente, totalImporte));  // 3
+        }
+
+        return resumen; // 1
+    }
+}
+
+class Comprobante {
+    private int facturaId;
+    private int clienteId;
+    private int importe;
+
+    public Comprobante(int facturaId, int clienteId, int importe) {
+        this.facturaId = facturaId;
+        this.clienteId = clienteId;
+        this.importe = importe;
+    }
+
+    public int getClienteId() {
+        return clienteId;
+    }
+
+    public int getImporte() {
+        return importe;
+    }
+}
+
+class Cliente {
+    private int idCliente;
+    private String nombreCliente;
+
+    public Cliente(int idCliente, String nombreCliente) {
+        this.idCliente = idCliente;
+        this.nombreCliente = nombreCliente;
+    }
+
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+}
+
+class ResumenCliente {
+    private int idCliente;
+    private String nombreCliente;
+    private int totalImporte;
+
+    public ResumenCliente(int idCliente, String nombreCliente, int totalImporte) {
+        this.idCliente = idCliente;
+        this.nombreCliente = nombreCliente;
+        this.totalImporte = totalImporte;
+    }
+
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public int getTotalImporte() {
+        return totalImporte;
+    }
+}
+   /* f(n) = 1 + 3n + 3 + 3 + 3 + 5 + 1 + 3n + 3 + 3 + 3 + 3 + 3
+      f(n) = 31 + 6n = O(n)
+      f(n) = 31 + 6n  <= c . n
+	  f(n) = 31/n + 6n/n <= c n/n
+	  f(n) = 31/n + 6 <= c  
+	  f(n) = 37 = c
+	  O(n) n0 = 1 c = 37 */  
+    
