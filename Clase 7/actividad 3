@@ -1,1 +1,87 @@
-..
+import java.util.Scanner;
+
+public class FloydWarshall {
+
+    final static int INF = 99999;  // Represents an infinite distance between nodes
+    int[][] next;
+
+    // Method to apply the Floyd-Warshall Algorithm
+    public void floydWarshall(int graph[][], int numVertices) {
+        int dist[][] = new int[numVertices][numVertices];
+        next = new int[numVertices][numVertices];
+        int i, j, k;
+
+        // Initialize the distance and next matrices
+        for (i = 0; i < numVertices; i++) {
+            for (j = 0; j < numVertices; j++) {
+                dist[i][j] = graph[i][j];
+                if (graph[i][j] != INF && i != j)
+                    next[i][j] = j;
+                else
+                    next[i][j] = -1;
+            }
+        }
+
+        // Implement Floyd-Warshall algorithm
+        for (k = 0; k < numVertices; k++) {
+            for (i = 0; i < numVertices; i++) {
+                for (j = 0; j < numVertices; j++) {
+                    if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                        next[i][j] = next[i][k];
+                    }
+                }
+            }
+        }
+
+        // Ask user for origin and destination and print the shortest path
+        printShortestPath(dist, numVertices);
+    }
+
+    // Method to print the shortest distance between two vertices and path
+    void printShortestPath(int dist[][], int numVertices) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the origin vertex (0 to " + (numVertices - 1) + "): ");
+        int origin = scanner.nextInt();
+        System.out.println("Enter the destination vertex (0 to " + (numVertices - 1) + "): ");
+        int destination = scanner.nextInt();
+
+        if (next[origin][destination] == -1) {
+            System.out.println("No path exists between vertex " + origin + " and vertex " + destination);
+        } else {
+            System.out.print("Shortest path from " + origin + " to " + destination + ": ");
+            printPath(origin, destination);
+            System.out.println("\nTotal time: " + dist[origin][destination] + " minutes");
+        }
+    }
+
+    // Helper method to print the actual path
+    void printPath(int u, int v) {
+        if (next[u][v] == -1) {
+            return;
+        }
+        System.out.print(u + " ");
+        while (u != v) {
+            u = next[u][v];
+            System.out.print(" -> " + u);
+        }
+    }
+
+    public static void main(String[] args) {
+        // Sample graph input
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the number of distribution centers (vertices): ");
+        int numVertices = scanner.nextInt();
+
+        int graph[][] = new int[numVertices][numVertices];
+        System.out.println("Enter the adjacency matrix (use 99999 for no direct path): ");
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                graph[i][j] = scanner.nextInt();
+            }
+        }
+
+        FloydWarshall fw = new FloydWarshall();
+        fw.floydWarshall(graph, numVertices);
+    }
+}
