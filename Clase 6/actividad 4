@@ -1,12 +1,3 @@
-class PaqueteInversion {
-    int costo;
-    int ganancia;
-
-    public PaqueteInversion(int costo, int ganancia) {
-        this.costo = costo;
-        this.ganancia = ganancia;
-    }
-}
 public class InversionFuerzaBruta {
 
     // Fuerza Bruta
