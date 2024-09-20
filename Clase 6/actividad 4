@@ -1,8 +1,18 @@
+class PaqueteInversion {
+    int costo;
+    int ganancia;
+
+    public PaqueteInversion(int costo, int ganancia) {
+        this.costo = costo;
+        this.ganancia = ganancia;
+    }
+}
+
 public class InversionFuerzaBruta {
 
     // Fuerza Bruta
     public static int seleccionFuerzaBruta(PaqueteInversion[] paquetes, int presupuesto, int n) {
-        // Caso base
+        // Caso base: si no hay paquetes o el presupuesto es 0
         if (n == 0 || presupuesto == 0) {
             return 0;
         }
@@ -11,9 +21,10 @@ public class InversionFuerzaBruta {
         if (paquetes[n - 1].costo > presupuesto) {
             return seleccionFuerzaBruta(paquetes, presupuesto, n - 1);
         } else {
-            // Máximo entre incluir o no el paquete actual
-            return Math.max(paquetes[n - 1].ganancia + seleccionFuerzaBruta(paquetes, presupuesto - paquetes[n - 1].costo, n - 1),
-                    seleccionFuerzaBruta(paquetes, presupuesto, n - 1));
+            // Elegir el máximo entre incluir o no el paquete actual
+            int incluirPaquete = paquetes[n - 1].ganancia + seleccionFuerzaBruta(paquetes, presupuesto - paquetes[n - 1].costo, n - 1);
+            int omitirPaquete = seleccionFuerzaBruta(paquetes, presupuesto, n - 1);
+            return Math.max(incluirPaquete, omitirPaquete);
         }
     }
 
@@ -30,6 +41,7 @@ public class InversionFuerzaBruta {
                 seleccionFuerzaBruta(paquetes, presupuesto, paquetes.length));
     }
 }
+
 --------------------------------------------------------------------------------------------------------------------------------
 import java.util.ArrayList;
 import java.util.List;
