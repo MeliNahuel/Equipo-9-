@@ -66,7 +66,26 @@ public class paquetesDeInversion {
         int[] ganancias = {150, 200, 100, 300};
         int presupuesto = 35;
         
+        System.out.println("Ganancia máxima Fuerza Bruta: " + seleccionFuerzaBruta(costos, ganancias,presupuesto,costos.length));
         System.out.println("La ganancia máxima es: " + maximizarGananciaGreedy(costos, ganancias,presupuesto));
+        System.out.println("Ganancia máxima Programación Dinámica: " + seleccionDinamica(costos, ganancias, presupuesto));
+    }
+    
+    public static int seleccionFuerzaBruta(int [] costos, int [] ganancias,int presupuesto,int n) {
+       	// Caso base: si no hay paquetes o el presupuesto es 0
+        if (n == 0 || presupuesto == 0) {
+            return 0;
+        }
+
+        // Si el costo del paquete actual es mayor que el presupuesto, lo omitimos
+        if (costos[n - 1] > presupuesto) {
+            return seleccionFuerzaBruta(costos, ganancias, presupuesto, n - 1);
+        } else {
+            // Elegir el máximo entre incluir o no el paquete actual
+            int incluirPaquete = ganancias[n - 1] + seleccionFuerzaBruta(costos, ganancias, presupuesto - costos[n - 1], n - 1);
+            int omitirPaquete = seleccionFuerzaBruta(costos, ganancias, presupuesto, n - 1);
+            return Math.max(incluirPaquete, omitirPaquete);
+        }
     }
     
     public static int maximizarGananciaGreedy(int [] costos, int [] ganancias,int presupuesto) {
@@ -99,6 +118,23 @@ public class paquetesDeInversion {
 
         return gananciaTotal;
     }
+    public static int seleccionDinamica(int [] costos, int [] ganancias, int presupuesto) {
+    	int n = costos.length;
+ 
+        int[][] dp = new int[n + 1][presupuesto + 1];
+
+        for (int i = 1; i <= n; i++) {
+            for (int w = 0; w <= presupuesto; w++) {
+                if (costos[i - 1] <= w) {
+                    dp[i][w] = Math.max(dp[i - 1][w], dp[i - 1][w - costos[i - 1]] + ganancias[i - 1]);
+                } else {
+                    dp[i][w] = dp[i - 1][w];
+                }
+            }
+        }
+        return dp[n][presupuesto];
+    }
+    
 }
 --------------------------------------------------------------------------------------------------------------------------------
 
