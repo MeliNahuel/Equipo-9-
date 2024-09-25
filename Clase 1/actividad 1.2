@@ -4,21 +4,33 @@ Actividad 1.2
 
 import java.math.BigInteger;
 
-public class LongAndBigIntegerExample {
-    public static void main(String[] args) {
-        // Example using long
-        long a = 9223372036854775807L; // Maximum value of long
-        long b = 1L;
-        long resultLong = a + b; // This will cause an overflow
+public class Ejecucion {
 
-        System.out.println("Result using long (with overflow): " + resultLong);
-
-        // Example using BigInteger
-        BigInteger bigA = new BigInteger("9223372036854775807");
-        BigInteger bigB = new BigInteger("1");
-        BigInteger resultBigInteger = bigA.add(bigB); // No overflow here
-
-        System.out.println("Result using BigInteger: " + resultBigInteger);
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		BigInteger numeroBI = new BigInteger("70");
+        BigInteger resultadoBI = factorialBI(numeroBI);
+        System.out.println("*Utilizacion de BigInteger*");
+        System.out.println("El factorial del numero " + numeroBI + " es " + resultadoBI);
+        System.out.println("");
+        long numeroL = 20;
+        long resultadoL = factorialL(numeroL);
+        System.out.println("*Utilizacion de long*");
+        System.out.println("El factorial del numero " + numeroL + " es " + resultadoL);
+	}
+	public static BigInteger factorialBI(BigInteger n) {
+		if (n == BigInteger.ZERO) {
+            return BigInteger.ONE;
+            } else {
+            return n.multiply(factorialBI(n.subtract(BigInteger.ONE)));
+        }
+    }
+	public static long factorialL(long n) {
+        if (n == 0) {
+            return 1;
+        } else {
+            return n * factorialL(n - 1);
+        }
     }
 }
 
