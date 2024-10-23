@@ -1,4 +1,3 @@
-
 public class DiseñoEquipoElectronicosOficinas {
 
     static int N = 4; // Tamaño del tablero 4x4
