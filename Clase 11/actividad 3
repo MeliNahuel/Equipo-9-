@@ -1,1 +1,111 @@
 
+public class DiseñoEquipoElectronicosOficinas {
+
+    static int N = 4; // Tamaño del tablero 4x4
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		System.out.println("C es donde iran las computadoras mientras que I es donde estaran las Impresoras en el tablero");
+		resolverEquipoElectronicos();
+	}
+	
+	public static void resolverEquipoElectronicos(){
+		int[][] tablero = new int[N][N]; // Crear un tablero vacío
+        colocarComputadoras(tablero, 0, 0); // Iniciar colocando las computadoras
+	}
+	
+	public static boolean colocarComputadoras(int[][] tablero, int fila, int ComputadorasColocados) {
+		if (ComputadorasColocados == 4) { // Si hemos colocado 4 escritorios, pasar a colocar sillas
+            colocarImpresoras(tablero, 0, 0);
+            return true;
+        }
+		for(int i = fila; i < N; i++) {
+			for(int j = 0; j < N; j++) {
+				if(esSeguroComputadora(tablero, i, j)) {
+                    // Colocar escritorio
+                    tablero[i][j] = 1;
+                    
+                    // Recursión para colocar el siguiente escritorio
+                    colocarComputadoras(tablero, i + 1, ComputadorasColocados + 1);
+                    
+                    // Backtrack: quitar escritorio
+                    tablero[i][j] = 0;
+                }
+            }
+        }
+
+        return false; // No hay solución válida en esta rama
+	}
+	public static boolean esSeguroComputadora(int tablero[][], int fila, int col) {
+        // Verificar fila
+        for (int i = 0; i < N; i++) {
+            if (tablero[fila][i] == 1) {
+                return false;
+            }
+        }
+        // Verificar columna
+        for (int i = 0; i < N; i++) {
+            if (tablero[i][col] == 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+	
+	public static boolean colocarImpresoras(int[][] tablero, int fila, int ImpresorasColocados) {
+		if (ImpresorasColocados == 4) { // Si se han colocado 4 sillas, imprimir el tablero
+            imprimirTablero(tablero);
+            return true;
+        }
+
+        for (int i = fila; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (esSeguroImpresora(tablero, i, j) && tablero[i][j] == 0) {
+                    // Colocar silla
+                    tablero[i][j] = 2;
+                    
+                    // Recursión para colocar la siguiente silla
+                    colocarImpresoras(tablero, i + 1, ImpresorasColocados + 1);
+                    
+                    // Backtrack: quitar silla
+                    tablero[i][j] = 0;
+                }
+            }
+        }
+
+        return false; // No hay solución válida en esta rama
+	}
+	public static boolean esSeguroImpresora(int tablero[][], int fila, int col) {
+        // Verificar fila
+        for (int i = 0; i < N; i++) {
+            if (tablero[fila][i] == 2) {
+                return false;
+            }
+        }
+        // Verificar columna
+        for (int i = 0; i < N; i++) {
+            if (tablero[i][col] == 2) {
+                return false;
+            }
+        }
+        return true;
+	}
+	
+	public static void imprimirTablero(int[][] tablero) {
+        System.out.println("Solución:");
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (tablero[i][j] == 1) {
+                    System.out.print("C "); // Computadoras
+                } else if (tablero[i][j] == 2) {
+                    System.out.print("I "); // Impresoras
+                } else {
+                    System.out.print(". ");
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+}
+
