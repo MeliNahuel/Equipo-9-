@@ -1,0 +1,16 @@
+import javax.swing.JFrame;
+
+public class JuegoTerror extends JFrame {
+    public JuegoTerror() {
+        setTitle("Juego de Terror");
+        setSize(800, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setResizable(false);
+    }
+
+    public static void main(String[] args) {
+        JuegoTerror juego = new JuegoTerror();
+        juego.setVisible(true);
+    }
+}
