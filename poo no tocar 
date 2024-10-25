@@ -226,3 +226,96 @@ public class Colisiones {
     }
 }
 
+main 
+import java.awt.*;
+import java.awt.image.BufferStrategy;
+
+public class JuegoTerror extends Canvas implements Runnable {
+    private Ventana ventana;
+    private boolean enFuncionamiento = false;
+    private Thread hilo;
+
+    // Instancias de clases
+    private Jugador jugador;
+    private Enemigo enemigo;
+    private ControladorTeclado teclado;
+    private HUD hud;
+    private Mapa mapa;
+    private Colisiones colisiones;
+    private Sonido sonido;
+
+    public JuegoTerror() {
+        ventana = new Ventana("Juego de Terror 2D", 800, 600, this);
+        teclado = new ControladorTeclado();
+        this.addKeyListener(teclado);
+
+        // Inicialización de objetos del juego
+        jugador = new Jugador(100, 100, "/ruta/jugador.png");
+        enemigo = new Enemigo(300, 300, "/ruta/enemigo.png");
+        hud = new HUD();
+        mapa = new Mapa("/ruta/mapa.png");
+        colisiones = new Colisiones();
+        sonido = new Sonido();
+    }
+
+    public synchronized void iniciar() {
+        enFuncionamiento = true;
+        hilo = new Thread(this);
+        hilo.start();
+    }
+
+    public synchronized void detener() {
+        enFuncionamiento = false;
+        try {
+            hilo.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void run() {
+        // Ciclo de juego
+        while (enFuncionamiento) {
+            actualizar();
+            renderizar();
+        }
+        detener();
+    }
+
+    private void actualizar() {
+        // Actualizar la lógica del juego
+        jugador.actualizar();
+        enemigo.actualizar();
+        hud.actualizar();
+
+        // Verificar colisiones entre jugador y enemigo
+        if (colisiones.verificarColision(new Rectangle(jugador.getX(), jugador.getY(), 32, 32),
+                                         new Rectangle(enemigo.getX(), enemigo.getY(), 32, 32))) {
+            hud.restarSalud(10);  // Ejemplo de restar salud en colisión
+            sonido.reproducirSonido("/ruta/sonido_colision.wav");
+        }
+    }
+
+    private void renderizar() {
+        BufferStrategy bs = this.getBufferStrategy();
+        if (bs == null) {
+            createBufferStrategy(3);
+            return;
+        }
+
+        Graphics g = bs.getDrawGraphics();
+
+        // Renderizar mapa, jugador, enemigo, HUD
+        mapa.renderizar(g);
+        jugador.renderizar(g);
+        enemigo.renderizar(g);
+        hud.renderizar(g);
+
+        g.dispose();
+        bs.show();
+    }
+
+    public static void main(String[] args) {
+        new JuegoTerror().iniciar();  // Iniciar el juego
+    }
+}
