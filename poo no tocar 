@@ -14,3 +14,21 @@ public class JuegoTerror extends JFrame {
         juego.setVisible(true);
     }
 }
+
+
+
+
+import javax.sound.sampled.*;
+
+public class Sonido {
+    public void reproducirSonido(String archivo) {
+        try {
+            AudioInputStream audioInput = AudioSystem.getAudioInputStream(getClass().getResource(archivo));
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInput);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
