@@ -1,22 +1,169 @@
-import javax.swing.JFrame;
+class juego de Terror 
 
-public class JuegoTerror extends JFrame {
+import java.awt.*;
+import java.awt.image.BufferStrategy;
+
+public class JuegoTerror extends Canvas implements Runnable {
+    private Ventana ventana;
+    private boolean enFuncionamiento = false;
+    private Thread hilo;
+
     public JuegoTerror() {
-        setTitle("Juego de Terror");
-        setSize(800, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setResizable(false);
+        ventana = new Ventana("Juego de Terror 2D", 800, 600, this);
+    }
+
+    public synchronized void iniciar() {
+        enFuncionamiento = true;
+        hilo = new Thread(this);
+        hilo.start();
+    }
+
+    public synchronized void detener() {
+        enFuncionamiento = false;
+        try {
+            hilo.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void run() {
+        while (enFuncionamiento) {
+            actualizar();
+            renderizar();
+        }
+        detener();
+    }
+
+    private void actualizar() {
+        // Lógica de actualización del juego
+    }
+
+    private void renderizar() {
+        BufferStrategy bs = this.getBufferStrategy();
+        if (bs == null) {
+            createBufferStrategy(3);
+            return;
+        }
+
+        Graphics g = bs.getDrawGraphics();
+        // Renderizado
+        g.dispose();
+        bs.show();
     }
 
     public static void main(String[] args) {
-        JuegoTerror juego = new JuegoTerror();
-        juego.setVisible(true);
+        new JuegoTerror().iniciar();
     }
 }
 
 
+classe ventana 
 
+import javax.swing.JFrame;
+
+public class Ventana {
+    public Ventana(String titulo, int ancho, int alto, JuegoTerror juego) {
+        JFrame frame = new JFrame(titulo);
+        frame.setSize(ancho, alto);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(juego);
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+}
+
+classe Sprite 
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+public class Sprite {
+    private BufferedImage imagen;
+
+    public Sprite(String path) {
+        try {
+            imagen = ImageIO.read(getClass().getResource(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public BufferedImage getImagen() {
+        return imagen;
+    }
+}
+
+classe jugador 
+
+import java.awt.Graphics;
+
+public class Jugador {
+    private int x, y;
+    private Sprite sprite;
+
+    public Jugador(int x, int y, String path) {
+        this.x = x;
+        this.y = y;
+        sprite = new Sprite(path);
+    }
+
+    public void actualizar() {
+        // Movimiento del jugador
+    }
+
+    public void renderizar(Graphics g) {
+        g.drawImage(sprite.getImagen(), x, y, null);
+    }
+}
+
+classe enemigo 
+
+import java.awt.Graphics;
+
+public class Enemigo {
+    private int x, y;
+    private Sprite sprite;
+
+    public Enemigo(int x, int y, String path) {
+        this.x = x;
+        this.y = y;
+        sprite = new Sprite(path);
+    }
+
+    public void actualizar() {
+        // Movimiento del enemigo
+    }
+
+    public void renderizar(Graphics g) {
+        g.drawImage(sprite.getImagen(), x, y, null);
+    }
+}
+
+classe de controlador de teclado 
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+public class ControladorTeclado extends KeyAdapter {
+    private boolean[] teclas = new boolean[120];
+
+    public void keyPressed(KeyEvent e) {
+        teclas[e.getKeyCode()] = true;
+    }
+
+    public void keyReleased(KeyEvent e) {
+        teclas[e.getKeyCode()] = false;
+    }
+
+    public boolean estaPresionada(int tecla) {
+        return teclas[tecla];
+    }
+}
+
+classe sonido 
 
 import javax.sound.sampled.*;
 
@@ -32,3 +179,50 @@ public class Sonido {
         }
     }
 }
+
+ classe hud 
+
+import java.awt.Graphics;
+
+public class HUD {
+    private int salud = 100;
+
+    public void actualizar() {
+        // Actualizar salud o puntaje
+    }
+
+    public void renderizar(Graphics g) {
+        g.drawString("Salud: " + salud, 10, 10);
+    }
+
+    public void restarSalud(int cantidad) {
+        salud -= cantidad;
+    }
+}
+
+classe mapa 
+
+import java.awt.Graphics;
+
+public class Mapa {
+    private Sprite fondo;
+
+    public Mapa(String path) {
+        fondo = new Sprite(path);
+    }
+
+    public void renderizar(Graphics g) {
+        g.drawImage(fondo.getImagen(), 0, 0, null);
+    }
+}
+
+ classe colisiones 
+
+import java.awt.Rectangle;
+
+public class Colisiones {
+    public boolean verificarColision(Rectangle objeto1, Rectangle objeto2) {
+        return objeto1.intersects(objeto2);
+    }
+}
+
