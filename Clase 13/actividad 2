@@ -1,0 +1,86 @@
+import java.util.*;
+
+class Nodo {
+    String destino;
+    int costo;
+    
+    public Nodo(String destino, int costo) {
+        this.destino = destino;
+        this.costo = costo;
+    }
+}
+
+class Camino implements Comparable<Camino> {
+    String destino;
+    int costoTotal;
+    List<String> ruta;
+
+    public Camino(String destino, int costoTotal, List<String> ruta) {
+        this.destino = destino;
+        this.costoTotal = costoTotal;
+        this.ruta = new ArrayList<>(ruta);
+    }
+
+    @Override
+    public int compareTo(Camino otro) {
+        return Integer.compare(this.costoTotal, otro.costoTotal);
+    }
+}
+
+public class ViajeMinimo {
+    private Map<String, List<Nodo>> grafo = new HashMap<>();
+
+    public void agregarRuta(String origen, String destino, int costo) {
+        grafo.computeIfAbsent(origen, k -> new ArrayList<>()).add(new Nodo(destino, costo));
+    }
+
+    public List<String> encontrarRutaMinima(String inicio, String objetivo) {
+        PriorityQueue<Camino> cola = new PriorityQueue<>();
+        cola.add(new Camino(inicio, 0, Arrays.asList(inicio)));
+
+        Set<String> visitados = new HashSet<>();
+
+        while (!cola.isEmpty()) {
+            Camino caminoActual = cola.poll();
+
+            if (visitados.contains(caminoActual.destino)) {
+                continue;
+            }
+
+            visitados.add(caminoActual.destino);
+
+            if (caminoActual.destino.equals(objetivo)) {
+                return caminoActual.ruta;
+            }
+
+            List<Nodo> vecinos = grafo.getOrDefault(caminoActual.destino, new ArrayList<>());
+
+            for (Nodo vecino : vecinos) {
+                if (!visitados.contains(vecino.destino)) {
+                    List<String> nuevaRuta = new ArrayList<>(caminoActual.ruta);
+                    nuevaRuta.add(vecino.destino);
+                    cola.add(new Camino(vecino.destino, caminoActual.costoTotal + vecino.costo, nuevaRuta));
+                }
+            }
+        }
+
+        return null;  // No hay ruta al destino
+    }
+
+    public static void main(String[] args) {
+        ViajeMinimo viaje = new ViajeMinimo();
+        viaje.agregarRuta("A", "B", 100);
+        viaje.agregarRuta("A", "C", 300);
+        viaje.agregarRuta("B", "D", 200);
+        viaje.agregarRuta("C", "D", 100);
+        viaje.agregarRuta("D", "E", 150);
+
+        List<String> ruta = viaje.encontrarRutaMinima("A", "E");
+
+        if (ruta != null) {
+            System.out.println("Ruta más económica: " + ruta);
+        } else {
+            System.out.println("No hay ruta al destino.");
+        }
+    }
+}
