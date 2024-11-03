@@ -1,1 +1,96 @@
-// Actividad 1
+package act1;
+
+import java.util.ArrayList;
+import java.util.List;
+
+class Accion {
+    String nombre;
+    double valor;
+
+    public Accion(String nombre, double valor) {
+        this.nombre = nombre;
+        this.valor = valor;
+    }
+}
+class NodoDecision {
+    boolean esMax;
+    double valor;
+    Accion accion;
+    List<NodoDecision> hijos;
+
+    public NodoDecision(boolean esMax, double valor, Accion accion) {
+        this.esMax = esMax;
+        this.valor = valor;
+        this.accion = accion;
+        this.hijos = new ArrayList<>();
+    }
+}
+
+public class DeteccionCiberAtaques {
+    static final int MAX = 1000;
+    static final int MIN = -1000;
+
+    public static void main(String[] args) {
+        // Definir acciones del atacante
+        Accion retirarDinero = new Accion("Retirar Dinero", 5000.00);
+        Accion cambiarDireccion = new Accion("Cambiar Dirección", 0);
+        Accion transferenciaInternacional = new Accion("Transferencia Internacional", 10000.00);
+
+        // Construir el árbol de decisiones
+        NodoDecision raiz = new NodoDecision(true, 0, null);
+        raiz.hijos.add(new NodoDecision(false, retirarDinero.valor, retirarDinero));
+        raiz.hijos.add(new NodoDecision(false, cambiarDireccion.valor, cambiarDireccion));
+        raiz.hijos.add(new NodoDecision(false, transferenciaInternacional.valor, transferenciaInternacional));
+
+        // Aplicar poda alfa-beta
+        int mejorValor = podaAlfaBeta(raiz, 0, DeteccionCiberAtaques.MIN, DeteccionCiberAtaques.MAX, true);
+        System.out.println("El valor óptimo es: " + mejorValor);
+    }
+
+    public static int podaAlfaBeta(NodoDecision nodo, int profundidad, int alfa, int beta, boolean maxJugador) {
+        // Condición de hoja
+        if (nodo.hijos.isEmpty()) {
+            return (int) nodo.valor;
+        }
+
+        if (maxJugador) {
+            int mejor = MIN;
+
+            for (NodoDecision hijo : nodo.hijos) {
+                int valor = podaAlfaBeta(hijo, profundidad + 1, alfa, beta, false);
+                mejor = Math.max(mejor, valor);
+                alfa = Math.max(alfa, mejor);
+
+                if (beta <= alfa) {
+                    break;
+                }
+            }
+            return mejor;
+        } else {
+            int mejor = MAX;
+
+            for (NodoDecision hijo : nodo.hijos) {
+                int valor = podaAlfaBeta(hijo, profundidad + 1, alfa, beta, true);
+                mejor = Math.min(mejor, valor);
+                beta = Math.min(beta, mejor);
+
+                if (beta <= alfa) {
+                    break;
+                }
+            }
+            return mejor;
+        }
+    }
+}
+
+/*El programa muestra ejemplos posibles de lo que podria hacer un atacante como: 
+Retirar una cantidad grande de dinero.
+Cambiar la dirección de envío de una tarjeta.
+Realizar una transferencia inusual a un país extranjero.
+*/
+
+/* El metodo de podaAlfaBeta se utiliza para evaluar el árbol de decisiones 
+ * y optimizar la búsqueda utilizando la poda alfa-beta. Este método recursivo 
+ * evalúa cada nodo y poda las ramas que no son relevantes para encontrar la mejor 
+ * solución.
+*/
