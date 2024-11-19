@@ -1,1 +1,39 @@
+Ejercicio hecho por Dana
+/*
+Explicación del problema del viajante
+El problema del viajante (TSP) plantea la cuestión de encontrar el recorrido más corto que permita visitar una serie de ciudades y regresar a la ciudad de inicio, 
+visitando cada ciudad solo una vez. Es un problema de optimización combinatoria relevante en áreas como logística, planificación de rutas y teoría de grafos. 
+Este problema pertenece a la clase de problemas NP-completos, lo que implica que no existe una solución eficiente para todas las instancias conocidas del problema
+
+Recorrido para las ciudades
+El punto de partida no importa, ya que cualquier ciudad puede ser el inicio del ciclo. Esto reduce el número de rutas posibles de n! a (n-1)!
+La dirección del recorrido no importa, porque recorrer las ciudades en sentido horario es equivalente a hacerlo en sentido antihorario. Por lo tanto, el número 
+de rutas se reduce nuevamente a la mitad, dividiendo por 2.
+Entonces la fórmula queda como: (n-1)! / 2
+
+Solución para el recorrido de 15 ciudades
+(15-1)! / 2 = 43.589.145.600 rutas diferentes
+
+Métodos heurísticos
+Dado que resolver este problema exacto es computacionalmente costoso, se utilizan métodos heurísticos y aproximados para obtener soluciones cercanas a la óptima. 
+Algunos de los métodos destacados son:
+
+Heurísticas constructivas
+Algoritmo del vecino más próximo (NN): Selecciona la ciudad no visitada más cercana como siguiente destino. Es rápido, pero puede generar soluciones subóptimas.
+Fragmento más cercano (NF): Conecta ciudades cercanas en fragmentos y mejora la solución de NN iterativamente.
+
+Árbol de expansión mínima: Utiliza un árbol mínimo para aproximar la solución con un factor de 2.
+
+Algoritmo de Christofides: Basado en árboles de expansión mínima, ofrece una aproximación con factor 1.5.
+
+Match Twice and Stitch (MTS): Realiza dos combinaciones de aristas para generar ciclos y los une en una solución.
+
+Mejoras Iterativas
+2-opt: Reemplaza dos aristas en la ruta para reducir la distancia total.
+k-opt: Extiende el 2-opt eliminando y reconectando k aristas para mejorar la ruta. El 3-opt es el más usado.
+V-opt (Lin-Kernighan): Generaliza k-opt, permitiendo eliminar un número variable de aristas y reconectarlas. Es uno de los métodos más efectivos para el TSP.
+
+Mejoras Aleatorias:
+Recocido simulado y Algoritmos genéticos: Métodos basados en procesos probabilísticos para explorar soluciones.
+Optimización por Colonia de Hormigas: Simula el comportamiento de las hormigas depositando feromonas para encontrar rutas cortas. Es especialmente efectivo para explorar múltiples posibilidades.
 
